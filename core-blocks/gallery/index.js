@@ -8,6 +8,7 @@ import { filter, every } from 'lodash';
  */
 import { __ } from '@wordpress/i18n';
 import { mediaUpload } from '@wordpress/utils';
+import { withNotices } from '@wordpress/components';
 import {
 	createBlock,
 	RichText,
@@ -135,11 +136,11 @@ export const settings = {
 				},
 				transform( files, onChange ) {
 					const block = createBlock( 'core/gallery' );
-					mediaUpload(
-						files,
-						( images ) => onChange( block.uid, { images } ),
-						'image'
-					);
+					mediaUpload( {
+						filesList: files,
+						onFileChange: ( images ) => onChange( block.uid, { images } ),
+						allowedType: 'image',
+					} );
 					return block;
 				},
 			},
@@ -165,7 +166,7 @@ export const settings = {
 		}
 	},
 
-	edit: GalleryBlock,
+	edit: withNotices( GalleryBlock ),
 
 	save( { attributes } ) {
 		const { images, columns = defaultColumnsNumber( attributes ), align, imageCrop, linkTo } = attributes;

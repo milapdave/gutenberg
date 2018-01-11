@@ -26,12 +26,14 @@ import {
 	TextControl,
 	TextareaControl,
 	Toolbar,
+	withNotices,
 } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import {
 	editorMediaUpload,
 	RichText,
 	BlockControls,
+	BlockNotices,
 	InspectorControls,
 	ImagePlaceholder,
 	MediaUpload,
@@ -77,13 +79,13 @@ class ImageBlock extends Component {
 			getBlobByURL( url )
 				.then(
 					( file ) =>
-						editorMediaUpload(
-							[ file ],
-							( [ image ] ) => {
+						editorMediaUpload( {
+							filesList: [ file ],
+							onFileChange: ( [ image ] ) => {
 								setAttributes( { ...image } );
 							},
-							'image'
-						)
+							allowedType: 'image',
+						} )
 				);
 		}
 	}
@@ -106,6 +108,15 @@ class ImageBlock extends Component {
 	}
 
 	onSelectImage( media ) {
+		if ( ! media ) {
+			this.props.setAttributes( {
+				url: undefined,
+				alt: undefined,
+				id: undefined,
+				caption: undefined,
+			} );
+			return;
+		}
 		this.props.setAttributes( {
 			...pick( media, [ 'alt', 'id', 'caption', 'url' ] ),
 			width: undefined,
@@ -167,8 +178,15 @@ class ImageBlock extends Component {
 	}
 
 	render() {
-		const { attributes, setAttributes, isSelected, className, settings, toggleSelection } = this.props;
+		const { attributes, setAttributes, isSelected, className, notices, settings, toggleSelection } = this.props;
 		const { url, alt, caption, align, id, href, width, height } = attributes;
+
+		const noticesUI = notices.noticeList.length > 0 &&
+		<BlockNotices
+			key="block-notices"
+			notices={ notices.noticeList }
+			onRemove={ notices.removeNotice }
+		/>;
 
 		const controls = (
 			<BlockControls>
@@ -206,6 +224,8 @@ class ImageBlock extends Component {
 						className={ className }
 						icon="format-image"
 						label={ __( 'Image' ) }
+						notices={ noticesUI }
+						onError={ notices.createErrorNotice }
 						onSelectImage={ this.onSelectImage }
 					/>
 				</Fragment>
@@ -300,6 +320,7 @@ class ImageBlock extends Component {
 		return (
 			<Fragment>
 				{ controls }
+				{ noticesUI }
 				<figure className={ classes }>
 					<ImageSize src={ url } dirtynessTrigger={ align }>
 						{ ( sizes ) => {
@@ -397,4 +418,5 @@ export default compose( [
 			image: id ? getMedia( id ) : null,
 		};
 	} ),
+	withNotices,
 ] )( ImageBlock );

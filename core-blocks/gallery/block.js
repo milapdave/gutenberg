@@ -22,6 +22,7 @@ import {
 	editorMediaUpload,
 	BlockControls,
 	BlockAlignmentToolbar,
+	BlockNotices,
 	MediaUpload,
 	ImagePlaceholder,
 	InspectorControls,
@@ -134,16 +135,17 @@ class GalleryBlock extends Component {
 
 	addFiles( files ) {
 		const currentImages = this.props.attributes.images || [];
-		const { setAttributes } = this.props;
-		editorMediaUpload(
-			files,
-			( images ) => {
+		const { notices, setAttributes } = this.props;
+		editorMediaUpload( {
+			allowedType: 'image',
+			filesList: files,
+			onFileChange: ( images ) => {
 				setAttributes( {
 					images: currentImages.concat( images ),
 				} );
 			},
-			'image',
-		);
+			onError: notices.createErrorNotice,
+		} );
 	}
 
 	componentWillReceiveProps( nextProps ) {
@@ -157,7 +159,7 @@ class GalleryBlock extends Component {
 	}
 
 	render() {
-		const { attributes, isSelected, className } = this.props;
+		const { attributes, isSelected, className, notices } = this.props;
 		const { images, columns = defaultColumnsNumber( attributes ), align, imageCrop, linkTo } = attributes;
 
 		const dropZone = (
@@ -194,6 +196,13 @@ class GalleryBlock extends Component {
 			</BlockControls>
 		);
 
+		const noticesUI = notices.noticeList.length > 0 &&
+			<BlockNotices
+				key="block-notices"
+				notices={ notices.noticeList }
+				onRemove={ notices.removeNotice }
+			/>;
+
 		if ( images.length === 0 ) {
 			return (
 				<Fragment>
@@ -204,6 +213,8 @@ class GalleryBlock extends Component {
 						label={ __( 'Gallery' ) }
 						onSelectImage={ this.onSelectImages }
 						multiple
+						notices={ noticesUI }
+						onError={ notices.createErrorNotice }
 					/>
 				</Fragment>
 			);
@@ -236,6 +247,7 @@ class GalleryBlock extends Component {
 					</PanelBody>
 				</InspectorControls>
 				<ul className={ `${ className } align${ align } columns-${ columns } ${ imageCrop ? 'is-cropped' : '' }` }>
+					{ noticesUI }
 					{ dropZone }
 					{ images.map( ( img, index ) => (
 						<li className="blocks-gallery-item" key={ img.id || img.url }>

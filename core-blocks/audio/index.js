@@ -91,7 +91,11 @@ export const settings = {
 				return false;
 			};
 			const setAudio = ( [ audio ] ) => onSelectAudio( audio );
-			const uploadFromFiles = ( event ) => editorMediaUpload( event.target.files, setAudio, 'audio' );
+			const uploadFromFiles = ( event ) => editorMediaUpload( {
+				filesList: event.target.files,
+				onFileChange: setAudio,
+				allowedType: 'audio',
+			} );
 
 			if ( editing ) {
 				return (
