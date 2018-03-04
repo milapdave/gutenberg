@@ -3,8 +3,8 @@
  */
 import { withContext } from '@wordpress/components';
 
-function InnerBlocks( { BlockList, layouts } ) {
-	return BlockList ? <BlockList layouts={ layouts } /> : null;
+function InnerBlocks( { BlockList, layouts, allowedBlocks, template } ) {
+	return BlockList ? <BlockList { ...{ layouts, allowedBlocks, template } } /> : null;
 }
 
 InnerBlocks = withContext( 'BlockList' )()( InnerBlocks );
