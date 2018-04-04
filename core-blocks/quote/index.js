@@ -68,7 +68,13 @@ export const settings = {
 			},
 			{
 				type: 'raw',
-				isMatch: ( node ) => node.nodeName === 'BLOCKQUOTE',
+				selector: 'blockquote',
+				schema: {
+					blockquote: {
+						// Handled by the raw handler.
+						children: '*',
+					},
+				},
 				transform( node ) {
 					return createBlock( name, {}, rawHandler( {
 						HTML: node.innerHTML,
