@@ -163,17 +163,18 @@ body.gutenberg-editor-page {
 .editor-block-list__block {
 	input,
 	textarea {
+		// use opacity to work in various editor styles
 		&::-webkit-input-placeholder {
-			color: $dark-gray-300;
+			color: $dark-opacity-300;
 		}
 		&::-moz-placeholder {
-			color: $dark-gray-300;
+			color: $dark-opacity-300;
 		}
 		&:-ms-input-placeholder {
-			color: $dark-gray-300;
+			color: $dark-opacity-300;
 		}
 		&:-moz-placeholder {
-			color: $dark-gray-300;
+			color: $dark-opacity-300;
 		}
 	}
 }
