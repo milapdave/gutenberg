@@ -82,8 +82,29 @@ export function postTypes( state = {}, action ) {
 	return state;
 }
 
+/**
+ * Reducer managing posts state. Keyed by ID.
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Dispatched action.
+ *
+ * @return {Object} Updated state.
+ */
+export function posts( state = {}, action ) {
+	switch ( action.type ) {
+		case 'RECEIVE_POSTS':
+			return {
+				...state,
+				...keyBy( action.posts, 'id' ),
+			};
+	}
+
+	return state;
+}
+
 export default combineReducers( {
 	terms,
 	media,
 	postTypes,
+	posts,
 } );

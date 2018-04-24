@@ -64,3 +64,17 @@ export function receivePostTypes( postTypes ) {
 		postTypes: castArray( postTypes ),
 	};
 }
+
+/**
+ * Returns an action object used in signalling that posts have been received.
+ *
+ * @param {Array|Object} posts Posts received.
+ *
+ * @return {Object} Action object.
+ */
+export function receivePosts( posts ) {
+	return {
+		type: 'RECEIVE_POSTS',
+		posts: castArray( posts ),
+	};
+}

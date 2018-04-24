@@ -62,10 +62,22 @@ export function getMedia( state, id ) {
  * Returns the Post Type object by slug.
  *
  * @param {Object} state Data state.
- * @param {number} slug  Post Type slug.
+ * @param {string} slug  Post Type slug.
  *
  * @return {Object?}     Post Type object.
  */
 export function getPostType( state, slug ) {
 	return state.postTypes[ slug ];
+}
+
+/**
+ * Returns the Post object by ID.
+ *
+ * @param {Object} state Data state.
+ * @param {number} id    Post ID.
+ *
+ * @return {Object?}     Post object.
+ */
+export function getPost( state, id ) {
+	return state.posts[ id ];
 }

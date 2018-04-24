@@ -6,8 +6,8 @@ import apiRequest from '@wordpress/api-request';
 /**
  * Internal dependencies
  */
-import { getCategories, getMedia, getPostType } from '../resolvers';
-import { setRequested, receiveTerms, receiveMedia, receivePostTypes } from '../actions';
+import { getCategories, getMedia, getPostType, getPost } from '../resolvers';
+import { setRequested, receiveTerms, receiveMedia, receivePostTypes, receivePosts } from '../actions';
 
 jest.mock( '@wordpress/api-request' );
 
@@ -64,5 +64,23 @@ describe( 'getPostType', () => {
 		const fulfillment = getPostType( {}, 'post' );
 		const received = ( await fulfillment.next() ).value;
 		expect( received ).toEqual( receivePostTypes( POST_TYPE ) );
+	} );
+} );
+
+describe( 'getPost', () => {
+	const POST = { id: 10 };
+
+	beforeAll( () => {
+		apiRequest.mockImplementation( ( options ) => {
+			if ( options.path === '/wp/v2/posts/10?context=edit' ) {
+				return Promise.resolve( POST );
+			}
+		} );
+	} );
+
+	it( 'yields with requested post', async () => {
+		const fulfillment = getPost( {}, 10 );
+		const received = ( await fulfillment.next() ).value;
+		expect( received ).toEqual( receivePosts( POST ) );
 	} );
 } );

@@ -11,6 +11,7 @@ import {
 	receiveTerms,
 	receiveMedia,
 	receivePostTypes,
+	receivePosts,
 } from './actions';
 
 /**
@@ -43,4 +44,9 @@ export async function* getMedia( state, id ) {
 export async function* getPostType( state, slug ) {
 	const postType = await apiRequest( { path: `/wp/v2/types/${ slug }?context=edit` } );
 	yield receivePostTypes( postType );
+}
+
+export async function* getPost( state, id ) {
+	const post = await apiRequest( { path: `/wp/v2/posts/${ id }?context=edit` } );
+	yield receivePosts( post );
 }

@@ -6,7 +6,7 @@ import deepFreeze from 'deep-freeze';
 /**
  * Internal dependencies
  */
-import { getTerms, isRequestingTerms, getMedia, getPostType } from '../selectors';
+import { getTerms, isRequestingTerms, getMedia, getPostType, getPost } from '../selectors';
 
 describe( 'getTerms()', () => {
 	it( 'returns value of terms by taxonomy', () => {
@@ -90,5 +90,23 @@ describe( 'getPostType', () => {
 			},
 		} );
 		expect( getPostType( state, 'post' ) ).toEqual( { slug: 'post' } );
+	} );
+} );
+
+describe( 'getPost', () => {
+	it( 'should return undefined for unknown post', () => {
+		const state = deepFreeze( {
+			posts: {},
+		} );
+		expect( getPost( state, 10 ) ).toBe( undefined );
+	} );
+
+	it( 'should return a post by ID', () => {
+		const state = deepFreeze( {
+			posts: {
+				10: { id: 10 },
+			},
+		} );
+		expect( getPost( state, 10 ) ).toEqual( { id: 10 } );
 	} );
 } );
