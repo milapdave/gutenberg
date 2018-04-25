@@ -16,7 +16,7 @@ import './style.scss';
 export const name = 'core/subhead';
 
 export const settings = {
-	title: __( 'Subhead' ),
+	title: __( 'Subheading' ),
 
 	description: __( 'Explanatory text under the main heading of an article.' ),
 
