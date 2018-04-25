@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 /**
  * External dependencies
  */
 import { noop, get } from 'lodash';
+import isShallowEqual from 'shallowequal';
 
 /**
  * WordPress dependencies
@@ -50,7 +52,26 @@ export class BlockEdit extends Component {
 		};
 	}
 
+	componentDidUpdate( prevProps, prevState ) {
+		const notEqual = ! isShallowEqual( prevProps, this.props );
+		console.log( 'BlockEdit did update:', notEqual, ! isShallowEqual( prevState, this.state ) );
+		if ( notEqual ) {
+			for ( const key in prevProps ) {
+				if ( prevProps.hasOwnProperty( key ) ) {
+					if ( prevProps[ key ] !== this.props[ key ] ) {
+						console.log( 'BlockEdit prop changed:', key );
+					}
+				}
+			}
+		}
+	}
+
+	shouldComponentUpdate( nextProps, nextState ) {
+		return ! isShallowEqual( this.props, nextProps ) || ! isShallowEqual( this.state, nextState );
+	}
+
 	render() {
+		console.log( 'BlockEdit render' );
 		return (
 			<BlockEditContextProvider value={ this.state.context }>
 				<Edit { ...this.props } />
