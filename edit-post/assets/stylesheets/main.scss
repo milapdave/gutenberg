@@ -48,6 +48,11 @@
 	}
 }
 
+// in order to use mix-blend-mode, this element needs to have an explicitly set background-color
+html {
+	background: $white;
+}
+
 body.gutenberg-editor-page {
 	background: $white;
 

@@ -235,6 +235,7 @@
 
 	&.is-multi-selected .editor-block-list__block-edit:before {
 		background: $blue-medium-highlight;
+		mix-blend-mode: multiply;
 	}
 
 	/**
