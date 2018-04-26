@@ -7,7 +7,6 @@ import { castArray } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { withState } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 import {
 	createBlock,
@@ -56,12 +55,9 @@ export const settings = {
 		}
 	},
 
-	edit: withState( {
-		editable: 'content',
-	} )( ( { attributes, setAttributes, isSelected, className, editable, setState } ) => {
+	edit: ( ( { attributes, setAttributes, isSelected, className } ) => {
 		const { citation, align } = attributes;
 		const updateAlignment = ( nextAlign ) => setAttributes( { align: nextAlign } );
-		const onSetActiveEditable = ( newEditable ) => () => setState( { editable: newEditable } );
 
 		return (
 			<Fragment>
@@ -84,8 +80,6 @@ export const settings = {
 									citation: nextCitation,
 								} )
 							}
-							isSelected={ isSelected && editable === 'cite' }
-							onFocus={ onSetActiveEditable( 'cite' ) }
 						/>
 					) }
 				</blockquote>
