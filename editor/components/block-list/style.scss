@@ -168,13 +168,11 @@
 		top: 10px;
 	}
 
-	&.is-selected > .editor-block-mover:before,
 	&.is-hovered > .editor-block-mover:before {
 		border-right: 1px solid $dark-opacity-light-500; // use opacity to work in various editor styles
 		right: 0;
 	}
 
-	&.is-selected > .editor-block-settings-menu:before,
 	&.is-hovered > .editor-block-settings-menu:before {
 		border-left: 1px solid $dark-opacity-light-500; // use opacity to work in various editor styles
 		left: 0;
@@ -668,11 +666,6 @@
 	.editor-block-list__block[data-align="right"] & {
 		left: auto;
 		right: 0;
-	}
-
-	// remove stacked borders in inline toolbar
-	> div:first-child {
-		margin-left: -1px;
 	}
 
 	@include break-small() {
