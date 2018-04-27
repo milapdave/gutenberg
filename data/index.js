@@ -285,11 +285,19 @@ export const withSelect = ( mapStateToProps ) => createHigherOrderComponent( ( W
 
 			this.runSelection = this.runSelection.bind( this );
 
+			/**
+			 * Boolean tracking known render conditions (own props or merged
+			 * props update) for `shouldComponentUpdate`.
+			 *
+			 * @type {boolean}
+			 */
+			this.shouldComponentUpdate = false;
+
 			this.state = {};
 		}
 
-		shouldComponentUpdate( nextProps, nextState ) {
-			return ! isShallowEqual( nextProps, this.props ) || ! isShallowEqual( nextState, this.state );
+		shouldComponentUpdate() {
+			return this.shouldComponentUpdate;
 		}
 
 		componentWillMount() {
@@ -302,6 +310,7 @@ export const withSelect = ( mapStateToProps ) => createHigherOrderComponent( ( W
 		componentWillReceiveProps( nextProps ) {
 			if ( ! isShallowEqual( nextProps, this.props ) ) {
 				this.runSelection( nextProps );
+				this.shouldComponentUpdate = true;
 			}
 		}
 
@@ -331,10 +340,14 @@ export const withSelect = ( mapStateToProps ) => createHigherOrderComponent( ( W
 				this.setState( {
 					mergeProps: nextMergeProps,
 				} );
+
+				this.shouldComponentUpdate = true;
 			}
 		}
 
 		render() {
+			this.shouldComponentUpdate = false;
+
 			return <WrappedComponent { ...this.props } { ...this.state.mergeProps } />;
 		}
 	};
